@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GGI Bus Service - Parent Dashboard</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+:root {
+    --bus-color: #e91e63;
+}
+
+body {
+    background: #f4f6f9;
+    color: #222;
+}
+
+/* ================= HEADER ================= */
+
+header {
+    background: var(--bus-color);
+    color: white;
+    padding: 20px 35px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+
+header h1 {
+    font-size: 26px;
+}
+
+header p {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.bus-title {
+    background: rgba(255,255,255,0.2);
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+/* ================= CONTAINER ================= */
+
+.container {
+    width: 94%;
+    max-width: 1400px;
+    margin: 25px auto;
+}
+
+.welcome {
+    margin-bottom: 22px;
+}
+
+.welcome h2 {
+    font-size: 28px;
+}
+
+.welcome p {
+    color: #666;
+    margin-top: 7px;
+}
+
+/* ================= BUS SELECTION ================= */
+
+.bus-selection {
+    background: white;
+    padding: 22px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+    margin-bottom: 25px;
+}
+
+.bus-selection h2 {
+    color: var(--bus-color);
+    margin-bottom: 15px;
+    font-size: 21px;
+}
+
+.bus-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.bus-btn {
+    border: none;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.bus-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.bus-btn.active {
+    outline: 4px solid #ddd;
+}
+
+.bus1 {
+    background: #e91e63;
+}
+
+.bus2 {
+    background: #1e88e5;
+}
+
+.bus3 {
+    background: #43a047;
+}
+
+.bus4 {
+    background: #fb8c00;
+}
+
+.bus5 {
+    background: #8e24aa;
+}
+
+/* ================= CARDS ================= */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: white;
+    padding: 22px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+    border-top: 5px solid var(--bus-color);
+}
+
+.card h3 {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.number {
+    color: var(--bus-color);
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.card p {
+    margin-top: 5px;
+    color: #888;
+    font-size: 13px;
+}
+
+/* ================= SECTION ================= */
+
+.section {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+}
+
+.section-title {
+    color: var(--bus-color);
+    border-left: 5px solid var(--bus-color);
+    padding-left: 12px;
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+
+/* ================= ATTENDANCE TABLE ================= */
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+th {
+    background: var(--bus-color);
+    color: white;
+    padding: 14px;
+}
+
+td {
+    padding: 13px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+tr:hover {
+    background: #fafafa;
+}
+
+.present {
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+.absent {
+    color: #d32f2f;
+    font-weight: bold;
+}
+
+/* ================= ROUTE ================= */
+
+.route-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.route-card {
+    background: #fafafa;
+    border: 1px solid #eee;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.route-card h4 {
+    color: #777;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.route-card p {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+/* ================= STATUS ================= */
+
+.status {
+    display: inline-block;
+    margin-top: 20px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+/* ================= MAP ================= */
+
+.map {
+    height: 450px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    border: 1px solid #ddd;
+
+    background:
+        linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px),
+        linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px);
+
+    background-size: 45px 45px;
+}
+
+/* Roads */
+
+.road {
+    position: absolute;
+    background: #d4d4d4;
+    height: 18px;
+    border-radius: 20px;
+}
+
+.road1 {
+    width: 85%;
+    left: 7%;
+    top: 55%;
+    transform: rotate(-10deg);
+}
+
+.road2 {
+    width: 75%;
+    left: 15%;
+    top: 30%;
+    transform: rotate(25deg);
+}
+
+.road3 {
+    width: 65%;
+    left: 20%;
+    top: 75%;
+    transform: rotate(12deg);
+}
+
+/* Route */
+
+.route-line {
+    position: absolute;
+    width: 75%;
+    height: 6px;
+    background: var(--bus-color);
+    left: 12%;
+    top: 53%;
+    transform: rotate(-8deg);
+    border-radius: 10px;
+}
+
+/* Locations */
+
+.location {
+    position: absolute;
+    text-align: center;
+    transform: translate(-50%, -50%);
+}
+
+.location-dot {
+    width: 21px;
+    height: 21px;
+    background: white;
+    border: 5px solid var(--bus-color);
+    border-radius: 50%;
+    margin: auto;
+}
+
+.location span {
+    display: block;
+    margin-top: 7px;
+    background: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 2px 7px rgba(0,0,0,0.15);
+}
+
+.campus {
+    left: 15%;
+    top: 57%;
+}
+
+.next-stop {
+    left: 82%;
+    top: 45%;
+}
+
+/* Bus */
+
+.bus-marker {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    background: var(--bus-color);
+    color: white;
+    border-radius: 50%;
+    border: 4px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.3);
+    transition: 2s;
+    left: 45%;
+    top: 52%;
+}
+
+.bus-marker::after {
+    content: "BUS";
+    position: absolute;
+    top: 48px;
+    background: white;
+    color: #333;
+    font-size: 10px;
+    padding: 4px 7px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* ================= FOOTER ================= */
+
+footer {
+    background: #222;
+    color: white;
+    text-align: center;
+    padding: 18px;
+    font-size: 13px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width: 1000px) {
+
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .route-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 600px) {
+
+    header {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .route-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .bus-buttons {
+        flex-direction: column;
+    }
+
+    .bus-btn {
+        width: 100%;
+    }
+
+    .map {
+        height: 350px;
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+    <div>
+        <h1>GGI BUS SERVICE</h1>
+        <p>Parent Dashboard</p>
+    </div>
+
+    <div class="bus-title" id="headerBus">
+        Bus 1
+    </div>
+
+</header>
+
+
+<div class="container">
+
+    <!-- ================= WELCOME ================= -->
+
+    <div class="welcome">
+
+        <h2>Welcome to Parent Dashboard</h2>
+
+        <p>
+            View attendance, route and live location of your selected bus.
+        </p>
+
+    </div>
+
+
+    <!-- ================= BUS SELECTION ================= -->
+
+    <div class="bus-selection">
+
+        <h2>🚌 Select Bus</h2>
+
+        <div class="bus-buttons">
+
+            <button
+                class="bus-btn bus1"
+                id="btnBus1"
+                onclick="changeBus('Bus 1')">
+                Bus 1
+            </button>
+
+            <button
+                class="bus-btn bus2"
+                id="btnBus2"
+                onclick="changeBus('Bus 2')">
+                Bus 2
+            </button>
+
+            <button
+                class="bus-btn bus3"
+                id="btnBus3"
+                onclick="changeBus('Bus 3')">
+                Bus 3
+            </button>
+
+            <button
+                class="bus-btn bus4"
+                id="btnBus4"
+                onclick="changeBus('Bus 4')">
+                Bus 4
+            </button>
+
+            <button
+                class="bus-btn bus5"
+                id="btnBus5"
+                onclick="changeBus('Bus 5')">
+                Bus 5
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= SUMMARY ================= -->
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>BUS NUMBER</h3>
+            <div class="number" id="busNumber">Bus 1</div>
+            <p>Selected Bus</p>
+        </div>
+
+        <div class="card">
+            <h3>TOTAL CAPACITY</h3>
+            <div class="number" id="capacity">40</div>
+            <p>Students</p>
+        </div>
+
+        <div class="card">
+            <h3>MORNING PRESENT</h3>
+            <div class="number" id="morningPresent">35</div>
+            <p>Students Present</p>
+        </div>
+
+        <div class="card">
+            <h3>MORNING ABSENT</h3>
+            <div class="number" id="morningAbsent">5</div>
+            <p>Students Absent</p>
+        </div>
+
+        <div class="card">
+            <h3>EVENING PRESENT</h3>
+            <div class="number" id="eveningPresent">32</div>
+            <p>Students Present</p>
+        </div>
+
+    </div>
+
+
+    <!-- ================= EVENING ABSENT ================= -->
+
+    <div class="cards">
+
+        <div class="card">
+
+            <h3>EVENING ABSENT</h3>
+
+            <div class="number" id="eveningAbsent">
+                8
+            </div>
+
+            <p>Students Absent</p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= ATTENDANCE ================= -->
+
+    <div class="section">
+
+        <h2 class="section-title">
+            Student Attendance
+        </h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Student No.</th>
+                        <th>Student Name</th>
+                        <th>Morning</th>
+                        <th>Evening</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="studentTable">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= ROUTE ================= -->
+
+    <div class="section">
+
+        <h2 class="section-title">
+            Route of Bus
+        </h2>
+
+        <div class="route-grid">
+
+            <div class="route-card">
+
+                <h4>ROUTE</h4>
+
+                <p id="route">
+                    GGI Campus → Main Gate → City Centre
+                </p>
+
+            </div>
+
+
+            <div class="route-card">
+
+                <h4>CURRENT LOCATION</h4>
+
+                <p id="currentLocation">
+                    GGI Campus
+                </p>
+
+            </div>
+
+
+            <div class="route-card">
+
+                <h4>NEXT STOP</h4>
+
+                <p id="nextStop">
+                    Main Gate
+                </p>
+
+            </div>
+
+
+            <div class="route-card">
+
+                <h4>NEXT STOP EXPECTED TIME</h4>
+
+                <p id="expectedTime">
+                    08:15 AM
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <span class="status">
+            ● Bus is Running
+        </span>
+
+    </div>
+
+
+    <!-- ================= LIVE TRACKING ================= -->
+
+    <div class="section">
+
+        <h2 class="section-title">
+            Live Bus Tracking
+        </h2>
+
+        <p style="margin-bottom:15px;color:#666;">
+            Showing location of
+            <b id="trackingBus">Bus 1</b>
+        </p>
+
+
+        <div class="map">
+
+            <div class="road road1"></div>
+            <div class="road road2"></div>
+            <div class="road road3"></div>
+
+            <div class="route-line"></div>
+
+
+            <!-- GGI CAMPUS -->
+
+            <div class="location campus">
+
+                <div class="location-dot"></div>
+
+                <span>
+                    GGI Campus
+                </span>
+
+            </div>
+
+
+            <!-- NEXT STOP -->
+
+            <div class="location next-stop">
+
+                <div class="location-dot"></div>
+
+                <span id="mapNextStop">
+                    Main Gate
+                </span>
+
+            </div>
+
+
+            <!-- BUS -->
+
+            <div
+                class="bus-marker"
+                id="busMarker">
+
+                🚌
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<footer>
+    © 2026 GGI Bus Service | Parent Portal
+</footer>
+
+
+<script>
+
+/* =====================================================
+   BUS DATA
+===================================================== */
+
+const buses = {
+
+    "Bus 1": {
+
+        color: "#e91e63",
+
+        capacity: 40,
+
+        morningPresent: 35,
+        morningAbsent: 5,
+
+        eveningPresent: 32,
+        eveningAbsent: 8,
+
+        route:
+        "GGI Campus → City Centre",
+
+        locations: [
+            "GGI Campus",
+            "City Centre"
+        ],
+
+        nextStop: "GGI campus",
+
+        time: "08:15 AM",
+
+        students: [
+            ["101", "Aman", "Present", "Present"],
+            ["102", "Rahul", "Present", "Absent"],
+            ["103", "Simran", "Absent", "Present"],
+            ["104", "Arjun", "Present", "Present"],
+            ["105", "Priya", "Present", "Present"]
+        ]
+
+    },
+
+
+    "Bus 2": {
+
+        color: "#1e88e5",
+
+        capacity: 45,
+
+        morningPresent: 41,
+        morningAbsent: 4,
+
+        eveningPresent: 39,
+        eveningAbsent: 6,
+
+        route:
+        "GGI Campus → Model Town → Railway Station",
+
+        locations: [
+            "GGI Campus",
+            "Model Town",
+            "Railway Station"
+        ],
+
+        nextStop: "Model Town",
+
+        time: "08:25 AM",
+
+        students: [
+            ["201", "Karan", "Present", "Present"],
+            ["202", "Harpreet", "Present", "Present"],
+            ["203", "Neha", "Absent", "Present"],
+            ["204", "Rohan", "Present", "Absent"],
+            ["205", "Mehak", "Present", "Present"]
+        ]
+
+    },
+
+
+    "Bus 3": {
+
+        color: "#43a047",
+
+        capacity: 42,
+
+        morningPresent: 37,
+        morningAbsent: 5,
+
+        eveningPresent: 35,
+        eveningAbsent: 7,
+
+        route:
+        "GGI Campus → Ferozepur Road → Dugri",
+
+        locations: [
+            "GGI Campus",
+            "Ferozepur Road",
+            "Dugri"
+        ],
+
+        nextStop: "Dugri",
+
+        time: "08:35 AM",
+
+        students: [
+            ["301", "Manpreet", "Present", "Present"],
+            ["302", "Gurpreet", "Present", "Absent"],
+            ["303", "Anjali", "Present", "Present"],
+            ["304", "Vikas", "Absent", "Present"],
+            ["305", "Navneet", "Present", "Present"]
+        ]
+
+    },
+
+
+    "Bus 4": {
+
+        color: "#fb8c00",
+
+        capacity: 38,
+
+        morningPresent: 34,
+        morningAbsent: 4,
+
+        eveningPresent: 31,
+        eveningAbsent: 7,
+
+        route:
+        "GGI Campus → Sarabha Nagar → Pakhowal Road",
+
+        locations: [
+            "GGI Campus",
+            "Sarabha Nagar",
+            "Pakhowal Road"
+        ],
+
+        nextStop: "Sarabha Nagar",
+
+        time: "08:45 AM",
+
+        students: [
+            ["401", "Ishita", "Present", "Present"],
+            ["402", "Akash", "Present", "Absent"],
+            ["403", "Muskan", "Present", "Present"],
+            ["404", "Deep", "Absent", "Present"],
+            ["405", "Ritika", "Present", "Present"]
+        ]
+
+    },
+
+
+    "Bus 5": {
+
+        color: "#8e24aa",
+
+        capacity: 50,
+
+        morningPresent: 46,
+        morningAbsent: 4,
+
+        eveningPresent: 43,
+        eveningAbsent: 7,
+
+        route:
+        "GGI Campus → Civil Lines → Bus Stand",
+
+        locations: [
+            "GGI Campus",
+            "Civil Lines",
+            "Bus Stand"
+        ],
+
+        nextStop: "Civil Lines",
+
+        time: "08:55 AM",
+
+        students: [
+            ["501", "Riya", "Present", "Present"],
+            ["502", "Yuvraj", "Present", "Present"],
+            ["503", "Sakshi", "Absent", "Present"],
+            ["504", "Mohit", "Present", "Absent"],
+            ["505", "Tanya", "Present", "Present"]
+        ]
+
+    }
+
+};
+
+
+/* =====================================================
+   GET BUS SELECTED FROM INDEX PAGE
+===================================================== */
+
+let selectedBus =
+    localStorage.getItem("selectedBus");
+
+
+if (!selectedBus || !buses[selectedBus]) {
+
+    selectedBus = "Bus 1";
+
+}
+
+
+/* =====================================================
+   CHANGE BUS
+===================================================== */
+
+function changeBus(busName) {
+
+    selectedBus = busName;
+
+    /* Save selected bus */
+
+    localStorage.setItem(
+        "selectedBus",
+        busName
+    );
+
+    loadBus(busName);
+
+}
+
+
+/* =====================================================
+   LOAD BUS DATA
+===================================================== */
+
+function loadBus(busName) {
+
+    const bus = buses[busName];
+
+
+    /* Change colour */
+
+    document.documentElement.style.setProperty(
+        "--bus-color",
+        bus.color
+    );
+
+
+    /* Header */
+
+    document.getElementById("headerBus")
+        .textContent = busName;
+
+
+    document.getElementById("busNumber")
+        .textContent = busName;
+
+
+    document.getElementById("trackingBus")
+        .textContent = busName;
+
+
+    /* Attendance */
+
+    document.getElementById("capacity")
+        .textContent = bus.capacity;
+
+
+    document.getElementById("morningPresent")
+        .textContent = bus.morningPresent;
+
+
+    document.getElementById("morningAbsent")
+        .textContent = bus.morningAbsent;
+
+
+    document.getElementById("eveningPresent")
+        .textContent = bus.eveningPresent;
+
+
+    document.getElementById("eveningAbsent")
+        .textContent = bus.eveningAbsent;
+
+
+    /* Route */
+
+    document.getElementById("route")
+        .textContent = bus.route;
+
+
+    document.getElementById("currentLocation")
+        .textContent = bus.locations[0];
+
+
+    document.getElementById("nextStop")
+        .textContent = bus.nextStop;
+
+
+    document.getElementById("expectedTime")
+        .textContent = bus.time;
+
+
+    document.getElementById("mapNextStop")
+        .textContent = bus.nextStop;
+
+
+    /* Student table */
+
+    const table =
+        document.getElementById("studentTable");
+
+    table.innerHTML = "";
+
+
+    bus.students.forEach(student => {
+
+        const row =
+            document.createElement("tr");
+
+
+        row.innerHTML = `
+
+            <td>${student[0]}</td>
+
+            <td>${student[1]}</td>
+
+            <td class="${student[2].toLowerCase()}">
+                ${student[2]}
+            </td>
+
+            <td class="${student[3].toLowerCase()}">
+                ${student[3]}
+            </td>
+
+        `;
+
+
+        table.appendChild(row);
+
+    });
+
+
+    /* Highlight selected bus */
+
+    document.querySelectorAll(".bus-btn")
+        .forEach(button => {
+
+            button.classList.remove("active");
+
+        });
+
+
+    document
+        .getElementById(
+            "btn" + busName.replace(" ", "")
+        )
+        .classList.add("active");
+
+
+    /* Reset map */
+
+    document.getElementById("busMarker")
+        .style.left = "20%";
+
+    document.getElementById("busMarker")
+        .style.top = "55%";
+
+}
+
+
+/* =====================================================
+   DEMO LIVE LOCATION
+===================================================== */
+
+let locationIndex = 0;
+
+
+function updateLiveLocation() {
+
+    const bus = buses[selectedBus];
+
+
+    locationIndex++;
+
+
+    if (
+        locationIndex >=
+        bus.locations.length
+    ) {
+
+        locationIndex = 0;
+
+    }
+
+
+    /* Current location */
+
+    document.getElementById(
+        "currentLocation"
+    ).textContent =
+        bus.locations[locationIndex];
+
+
+    /* Next stop */
+
+    if (locationIndex === 0) {
+
+        document.getElementById(
+            "nextStop"
+        ).textContent =
+            bus.locations[1];
+
+    }
+
+    else if (locationIndex === 1) {
+
+        document.getElementById(
+            "nextStop"
+        ).textContent =
+            bus.locations[2];
+
+    }
+
+    else {
+
+        document.getElementById(
+            "nextStop"
+        ).textContent =
+            "GGI Campus";
+
+    }
+
+
+    /* Map movement */
+
+    const positions = [
+
+        {
+            left: "20%",
+            top: "55%"
+        },
+
+        {
+            left: "50%",
+            top: "48%"
+        },
+
+        {
+            left: "78%",
+            top: "42%"
+        }
+
+    ];
+
+
+    document.getElementById(
+        "busMarker"
+    ).style.left =
+        positions[locationIndex].left;
+
+
+    document.getElementById(
+        "busMarker"
+    ).style.top =
+        positions[locationIndex].top;
+
+}
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+loadBus(selectedBus);
+
+
+/* Demo movement every 10 seconds */
+
+setInterval(
+    updateLiveLocation,
+    10000
+);
+
+</script>
+
+</body>
+</html>

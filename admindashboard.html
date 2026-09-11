@@ -1,0 +1,1609 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GGI Admin Dashboard</title>
+
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <style>
+
+        /* =========================
+           BASIC SETTINGS
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        :root {
+            --theme: #e91e63;
+            --light-theme: #fce4ec;
+            --dark-theme: #ad1457;
+        }
+
+        body {
+            background: #f4f6f9;
+            color: #263238;
+            transition: 0.3s;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            background: linear-gradient(
+                135deg,
+                var(--dark-theme),
+                var(--theme)
+            );
+
+            color: white;
+
+            text-align: center;
+
+            padding: 30px 20px;
+
+            box-shadow:
+                0 4px 15px rgba(0,0,0,0.20);
+
+            transition: 0.3s;
+        }
+
+        header h1 {
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            font-size: 15px;
+        }
+
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .container {
+            width: 94%;
+            max-width: 1400px;
+            margin: 25px auto;
+        }
+
+
+        /* =========================
+           BUS SELECTION
+        ========================= */
+
+        .bus-selection {
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 15px;
+
+            margin-bottom: 22px;
+
+            box-shadow:
+                0 4px 12px rgba(0,0,0,0.08);
+
+            border-top:
+                5px solid var(--theme);
+
+            transition: 0.3s;
+        }
+
+        .bus-selection h2 {
+            margin-bottom: 18px;
+        }
+
+        .bus-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .bus-btn {
+            padding: 14px 32px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.25s;
+        }
+
+        .bus-btn:hover {
+            transform: translateY(-3px);
+            opacity: 0.9;
+        }
+
+        .bus-btn.active {
+            transform: scale(1.06);
+
+            box-shadow:
+                0 5px 15px
+                rgba(0,0,0,0.30);
+
+            outline:
+                3px solid white;
+        }
+
+
+        /* =========================
+           BUS COLORS
+        ========================= */
+
+        .bus1 {
+            background: #e91e63;
+        }
+
+        .bus2 {
+            background: #1e88e5;
+        }
+
+        .bus3 {
+            background: #43a047;
+        }
+
+        .bus4 {
+            background: #fb8c00;
+        }
+
+        .bus5 {
+            background: #8e24aa;
+        }
+
+
+        /* =========================
+           INFORMATION CARDS
+        ========================= */
+
+        .cards {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 22px;
+        }
+
+        .card {
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 4px 12px
+                rgba(0,0,0,0.08);
+
+            border-top:
+                5px solid var(--theme);
+
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+        }
+
+        .card h3 {
+            color: #607d8b;
+
+            font-size: 14px;
+
+            margin-bottom: 10px;
+        }
+
+        .number {
+            font-size: 28px;
+
+            font-weight: bold;
+
+            color: var(--theme);
+
+            transition: 0.3s;
+        }
+
+
+        /* =========================
+           STUDENT SECTION
+        ========================= */
+
+        .student-section {
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 14px;
+
+            margin-bottom: 22px;
+
+            box-shadow:
+                0 4px 12px
+                rgba(0,0,0,0.08);
+
+            border-top:
+                5px solid var(--theme);
+
+            transition: 0.3s;
+        }
+
+        .student-section h2 {
+            margin-bottom: 18px;
+        }
+
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--theme);
+
+            color: white;
+
+            padding: 14px;
+
+            text-align: left;
+
+            transition: 0.3s;
+        }
+
+        td {
+            padding: 14px;
+
+            border-bottom:
+                1px solid #e0e0e0;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        .present {
+            color: #2e7d32;
+
+            font-weight: bold;
+        }
+
+        .absent {
+            color: #c62828;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           LIVE TRACKING
+        ========================= */
+
+        .tracking-section {
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 4px 12px
+                rgba(0,0,0,0.08);
+
+            border-top:
+                5px solid var(--theme);
+
+            transition: 0.3s;
+        }
+
+        .tracking-section h2 {
+            margin-bottom: 18px;
+        }
+
+
+        /* =========================
+           TRACKING INFORMATION
+        ========================= */
+
+        .tracking-info {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 15px;
+
+            margin-bottom: 20px;
+        }
+
+        .tracking-box {
+            background: var(--light-theme);
+
+            padding: 18px;
+
+            border-radius: 10px;
+
+            border-left:
+                5px solid var(--theme);
+
+            transition: 0.3s;
+        }
+
+        .tracking-box strong {
+            display: block;
+
+            color: #607d8b;
+
+            margin-bottom: 7px;
+
+            font-size: 14px;
+        }
+
+        .tracking-box span {
+            font-weight: bold;
+        }
+
+        .live {
+            color: #2e7d32;
+        }
+
+
+        /* =========================
+           MAP
+        ========================= */
+
+        #map {
+            height: 520px;
+
+            width: 100%;
+
+            border-radius: 12px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 3px 10px
+                rgba(0,0,0,0.15);
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            text-align: center;
+
+            padding: 20px;
+
+            margin-top: 25px;
+
+            color: #607d8b;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           TABLET
+        ========================= */
+
+        @media(max-width: 900px) {
+
+            .cards {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .tracking-info {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media(max-width: 600px) {
+
+            header h1 {
+                font-size: 26px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .tracking-info {
+                grid-template-columns: 1fr;
+            }
+
+            .bus-buttons {
+                flex-direction: column;
+            }
+
+            .bus-btn {
+                width: 100%;
+            }
+
+            #map {
+                height: 400px;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th,
+            td {
+                padding: 10px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =================================================
+     HEADER
+================================================= -->
+
+<header>
+
+    <h1>
+        WELCOME to GGI
+    </h1>
+
+    <p>
+        Campus Bus Management & Live Tracking System
+    </p>
+
+</header>
+
+
+<div class="container">
+
+
+    <!-- =================================================
+         BUS SELECTION
+    ================================================= -->
+
+    <section class="bus-selection">
+
+        <h2>
+            🚌 Select Bus
+        </h2>
+
+        <div class="bus-buttons">
+
+
+            <button
+                class="bus-btn bus1 active"
+                onclick="selectBus(0)"
+            >
+                BUS 01
+            </button>
+
+
+            <button
+                class="bus-btn bus2"
+                onclick="selectBus(1)"
+            >
+                BUS 02
+            </button>
+
+
+            <button
+                class="bus-btn bus3"
+                onclick="selectBus(2)"
+            >
+                BUS 03
+            </button>
+
+
+            <button
+                class="bus-btn bus4"
+                onclick="selectBus(3)"
+            >
+                BUS 04
+            </button>
+
+
+            <button
+                class="bus-btn bus5"
+                onclick="selectBus(4)"
+            >
+                BUS 05
+            </button>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         BUS INFORMATION
+    ================================================= -->
+
+    <section class="cards">
+
+
+        <div class="card">
+
+            <h3>
+                BUS NUMBER
+            </h3>
+
+            <div
+                class="number"
+                id="busNumber"
+            >
+                BUS 01
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                TOTAL STUDENTS
+            </h3>
+
+            <div
+                class="number"
+                id="totalStudents"
+            >
+                5
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                PRESENT STUDENTS
+            </h3>
+
+            <div
+                class="number"
+                id="presentStudents"
+            >
+                4
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                ABSENT STUDENTS
+            </h3>
+
+            <div
+                class="number"
+                id="absentStudents"
+            >
+                1
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         STUDENT INFORMATION
+    ================================================= -->
+
+    <section class="student-section">
+
+        <h2>
+            👨‍🎓 Student Attendance
+        </h2>
+
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Student No.
+                    </th>
+
+                    <th>
+                        Student Name
+                    </th>
+
+                    <th>
+                        Attendance
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody
+                id="studentTable"
+            >
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+
+
+    <!-- =================================================
+         LIVE BUS TRACKING
+    ================================================= -->
+
+    <section class="tracking-section">
+
+
+        <h2>
+            📍 Live Bus Tracking
+        </h2>
+
+
+        <div class="tracking-info">
+
+
+            <!-- BUS -->
+
+            <div
+                class="tracking-box"
+                id="trackingBusBox"
+            >
+
+                <strong>
+                    Bus
+                </strong>
+
+                <span
+                    id="trackingBus"
+                >
+                    BUS 01
+                </span>
+
+            </div>
+
+
+            <!-- ROUTE -->
+
+            <div
+                class="tracking-box"
+                id="routeBox"
+            >
+
+                <strong>
+                    Route
+                </strong>
+
+                <span
+                    id="route"
+                >
+                    Main Gate → GGI Campus
+                </span>
+
+            </div>
+
+
+            <!-- CURRENT LOCATION -->
+
+            <div class="tracking-box">
+
+                <strong>
+                    Current Location
+                </strong>
+
+                <span
+                    id="currentLocation"
+                >
+                    Loading...
+                </span>
+
+            </div>
+
+
+            <!-- NEXT STOP -->
+
+            <div class="tracking-box">
+
+                <strong>
+                    Next Stop
+                </strong>
+
+                <span
+                    id="nextStop"
+                >
+                    Main Gate
+                </span>
+
+            </div>
+
+
+            <!-- EXPECTED TIME -->
+
+            <div class="tracking-box">
+
+                <strong>
+                    Expected Time to Reach Next Stop
+                </strong>
+
+                <span
+                    id="expectedTime"
+                >
+                    10 minutes
+                </span>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="tracking-box">
+
+                <strong>
+                    Status
+                </strong>
+
+                <span class="live">
+
+                    🟢 BUS ON ROUTE
+
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- MAP -->
+
+        <div id="map"></div>
+
+
+    </section>
+
+
+</div>
+
+
+<footer>
+
+    GGI Campus Bus Management System © 2026
+
+</footer>
+
+
+
+<!-- =================================================
+     LEAFLET JAVASCRIPT
+================================================= -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+
+<script>
+
+/* =====================================================
+   BUS DATA
+===================================================== */
+
+const buses = [
+
+    {
+        number: "BUS 01",
+
+        color: "#e91e63",
+
+        lightColor: "#fce4ec",
+
+        darkColor: "#ad1457",
+
+        route:
+            "GGI Campus → City center",
+
+        currentLocation:
+            "City center",
+            
+
+        nextStop:
+            "Model Town",
+
+        expectedTime:
+            "10 minutes",
+
+        students: [
+
+            ["101", "Rahul Sharma", "Present"],
+
+            ["102", "Aman Kumar", "Present"],
+
+            ["103", "Rohit Singh", "Absent"],
+
+            ["104", "Arjun Verma", "Present"],
+
+            ["105", "Karan Gupta", "Present"]
+
+        ],
+
+        location:
+            [30.9000, 75.8573]
+    },
+
+
+    {
+        number: "BUS 02",
+
+        color: "#1e88e5",
+
+        lightColor: "#e3f2fd",
+
+        darkColor: "#1565c0",
+
+        route:
+            "Model Town → GGI Campus",
+
+        currentLocation:
+            "Model Town",
+
+        nextStop:
+            "Model Town Chowk",
+
+        expectedTime:
+            "15 minutes",
+
+        students: [
+
+            ["201", "Ankit Kumar", "Present"],
+
+            ["202", "Harsh Sharma", "Present"],
+
+            ["203", "Manpreet Singh", "Present"],
+
+            ["204", "Simran Kaur", "Absent"],
+
+            ["205", "Raj Kumar", "Present"]
+
+        ],
+
+        location:
+            [30.9050, 75.8500]
+    },
+
+
+    {
+        number: "BUS 03",
+
+        color: "#43a047",
+
+        lightColor: "#e8f5e9",
+
+        darkColor: "#2e7d32",
+
+        route:
+            "Civil Lines → GGI Campus",
+
+        currentLocation:
+            "Civil Lines",
+
+        nextStop:
+            "Civil Lines Chowk",
+
+        expectedTime:
+            "8 minutes",
+
+        students: [
+
+            ["301", "Aarav Singh", "Present"],
+
+            ["302", "Dev Kumar", "Present"],
+
+            ["303", "Kunal Sharma", "Absent"],
+
+            ["304", "Mohit", "Present"],
+
+            ["305", "Vikas", "Present"]
+
+        ],
+
+        location:
+            [30.9100, 75.8650]
+    },
+
+
+    {
+        number: "BUS 04",
+
+        color: "#fb8c00",
+
+        lightColor: "#fff3e0",
+
+        darkColor: "#ef6c00",
+
+        route:
+            "Dugri → GGI Campus",
+
+        currentLocation:
+            "Dugri",
+
+        nextStop:
+            "Dugri Chowk",
+
+        expectedTime:
+            "20 minutes",
+
+        students: [
+
+            ["401", "Akash", "Present"],
+
+            ["402", "Yash", "Absent"],
+
+            ["403", "Varun", "Present"],
+
+            ["404", "Ravi", "Present"],
+
+            ["405", "Nikhil", "Present"]
+
+        ],
+
+        location:
+            [30.8900, 75.8400]
+    },
+
+
+    {
+        number: "BUS 05",
+
+        color: "#8e24aa",
+
+        lightColor: "#f3e5f5",
+
+        darkColor: "#6a1b9a",
+
+        route:
+            "Ferozepur Road → GGI Campus",
+
+        currentLocation:
+            "Ferozepur Road",
+
+        nextStop:
+            "Ferozepur Road Chowk",
+
+        expectedTime:
+            "12 minutes",
+
+        students: [
+
+            ["501", "Sahil", "Present"],
+
+            ["502", "Rohan", "Present"],
+
+            ["503", "Gaurav", "Present"],
+
+            ["504", "Vivek", "Absent"],
+
+            ["505", "Deepak", "Present"]
+
+        ],
+
+        location:
+            [30.9200, 75.8750]
+    }
+
+];
+
+
+/* =====================================================
+   MAP
+===================================================== */
+
+const map =
+    L.map("map")
+     .setView(
+         [30.9000, 75.8573],
+         13
+     );
+
+
+L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+
+        attribution:
+            "© OpenStreetMap contributors"
+
+    }
+).addTo(map);
+
+
+let busMarker = null;
+
+let routeLine = null;
+
+
+
+/* =====================================================
+   CHANGE DASHBOARD COLOR
+===================================================== */
+
+function changeTheme(bus) {
+
+    document.documentElement.style
+        .setProperty(
+            "--theme",
+            bus.color
+        );
+
+
+    document.documentElement.style
+        .setProperty(
+            "--light-theme",
+            bus.lightColor
+        );
+
+
+    document.documentElement.style
+        .setProperty(
+            "--dark-theme",
+            bus.darkColor
+        );
+
+}
+
+
+
+/* =====================================================
+   GET CURRENT PLACE NAME
+===================================================== */
+
+async function getPlaceName(
+    latitude,
+    longitude
+) {
+
+    try {
+
+        const response =
+            await fetch(
+
+                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (data.address) {
+
+            const address =
+                data.address;
+
+
+            const place =
+                address.road ||
+                address.suburb ||
+                address.city ||
+                address.town ||
+                address.village ||
+                "Unknown location";
+
+
+            const city =
+                address.city ||
+                address.town ||
+                address.village ||
+                "";
+
+
+            if (
+                city &&
+                place !== city
+            ) {
+
+                document.getElementById(
+                    "currentLocation"
+                ).textContent =
+                    place + ", " + city;
+
+            }
+            else {
+
+                document.getElementById(
+                    "currentLocation"
+                ).textContent =
+                    place;
+
+            }
+
+        }
+
+    }
+
+    catch (error) {
+
+        document.getElementById(
+            "currentLocation"
+        ).textContent =
+            "Location unavailable";
+
+    }
+
+}
+
+
+
+/* =====================================================
+   SELECT BUS
+===================================================== */
+
+function selectBus(index) {
+
+    const bus =
+        buses[index];
+
+
+    /* Active button */
+
+    document
+        .querySelectorAll(".bus-btn")
+        .forEach(
+            button =>
+                button.classList.remove(
+                    "active"
+                )
+        );
+
+
+    document
+        .querySelectorAll(".bus-btn")[index]
+        .classList.add(
+            "active"
+        );
+
+
+    /* Change complete theme */
+
+    changeTheme(bus);
+
+
+    /* Bus number */
+
+    document.getElementById(
+        "busNumber"
+    ).textContent =
+        bus.number;
+
+
+    document.getElementById(
+        "trackingBus"
+    ).textContent =
+        bus.number;
+
+
+    /* Student count */
+
+    document.getElementById(
+        "totalStudents"
+    ).textContent =
+        bus.students.length;
+
+
+    const present =
+        bus.students.filter(
+            student =>
+                student[2] === "Present"
+        ).length;
+
+
+    const absent =
+        bus.students.length -
+        present;
+
+
+    document.getElementById(
+        "presentStudents"
+    ).textContent =
+        present;
+
+
+    document.getElementById(
+        "absentStudents"
+    ).textContent =
+        absent;
+
+
+    /* Route */
+
+    document.getElementById(
+        "route"
+    ).textContent =
+        bus.route;
+
+
+    /* Next Stop */
+
+    document.getElementById(
+        "nextStop"
+    ).textContent =
+        bus.nextStop;
+
+
+    /* Expected Time */
+
+    document.getElementById(
+        "expectedTime"
+    ).textContent =
+        bus.expectedTime;
+
+
+    /* Student Table */
+
+    const table =
+        document.getElementById(
+            "studentTable"
+        );
+
+
+    table.innerHTML = "";
+
+
+    bus.students.forEach(
+        student => {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${student[0]}
+                </td>
+
+                <td>
+                    ${student[1]}
+                </td>
+
+                <td class="${
+                    student[2] === "Present"
+                    ? "present"
+                    : "absent"
+                }">
+
+                    ${
+                        student[2] === "Present"
+                        ? "✓ Present"
+                        : "✗ Absent"
+                    }
+
+                </td>
+
+            `;
+
+
+            table.appendChild(row);
+
+        }
+    );
+
+
+    /* Update map */
+
+    updateMap(bus);
+
+}
+
+
+
+/* =====================================================
+   UPDATE MAP
+===================================================== */
+
+function updateMap(bus) {
+
+    const position =
+        bus.location;
+
+
+    /* Remove old marker */
+
+    if (busMarker) {
+
+        map.removeLayer(
+            busMarker
+        );
+
+    }
+
+
+    /* Remove old route */
+
+    if (routeLine) {
+
+        map.removeLayer(
+            routeLine
+        );
+
+    }
+
+
+    /* Colored bus marker */
+
+    const coloredBusIcon =
+        L.divIcon({
+
+            className:
+                "custom-bus-icon",
+
+            html: `
+
+                <div style="
+
+                    background:${bus.color};
+
+                    width:52px;
+
+                    height:52px;
+
+                    border-radius:50%;
+
+                    display:flex;
+
+                    align-items:center;
+
+                    justify-content:center;
+
+                    border:4px solid white;
+
+                    box-shadow:
+                        0 4px 12px
+                        rgba(0,0,0,0.4);
+
+                    font-size:26px;
+
+                ">
+
+                    🚌
+
+                </div>
+
+            `,
+
+            iconSize:
+                [52,52],
+
+            iconAnchor:
+                [26,26]
+
+        });
+
+
+    /* Add marker */
+
+    busMarker =
+        L.marker(
+            position,
+            {
+                icon:
+                    coloredBusIcon
+            }
+        )
+        .addTo(map);
+
+
+    /* Popup */
+
+    busMarker.bindPopup(`
+
+        <div
+            style="
+                font-size:14px;
+                line-height:1.8;
+            "
+        >
+
+            <b
+                style="
+                    color:${bus.color};
+                    font-size:18px;
+                "
+            >
+                🚌 ${bus.number}
+            </b>
+
+            <br>
+
+            <b>Route:</b>
+            ${bus.route}
+
+            <br>
+
+            <b>Next Stop:</b>
+            ${bus.nextStop}
+
+            <br>
+
+            <b>Expected:</b>
+            ${bus.expectedTime}
+
+        </div>
+
+    `);
+
+
+    /* Route line */
+
+    const route = [
+
+        position,
+
+        [
+            position[0] + 0.010,
+            position[1] + 0.010
+        ],
+
+        [
+            position[0] + 0.020,
+            position[1] + 0.005
+        ],
+
+        [
+            position[0] + 0.030,
+            position[1] + 0.015
+        ]
+
+    ];
+
+
+    routeLine =
+        L.polyline(
+            route,
+            {
+
+                color:
+                    bus.color,
+
+                weight:
+                    6,
+
+                opacity:
+                    0.85
+
+            }
+        )
+        .addTo(map);
+
+
+    /* Center map */
+
+    map.setView(
+        position,
+        14
+    );
+
+
+    /* Convert coordinates to place */
+
+    getPlaceName(
+        position[0],
+        position[1]
+    );
+
+}
+
+
+
+/* =====================================================
+   DEMO BUS MOVEMENT
+===================================================== */
+
+/*
+   This is DEMO movement.
+
+   Later this can be replaced by
+   real GPS data from the driver's phone.
+*/
+
+setInterval(
+    () => {
+
+        const bus =
+            buses[0];
+
+
+        bus.location[0]
+            += 0.0002;
+
+
+        bus.location[1]
+            += 0.0002;
+
+
+        if (
+            document.getElementById(
+                "busNumber"
+            ).textContent ===
+            bus.number
+        ) {
+
+            updateMap(bus);
+
+        }
+
+    },
+    5000
+);
+
+
+
+/* =====================================================
+   START WITH BUS 01
+===================================================== */
+
+selectBus(0);
+
+</script>
+
+</body>
+
+</html>
+```

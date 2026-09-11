@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GGI Bus Service - Login</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #e8f1ff, #f8fbff);
+        }
+
+        .container {
+            width: 950px;
+            max-width: 95%;
+            min-height: 600px;
+            display: flex;
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
+        }
+
+        /* LEFT SIDE */
+
+        .left-panel {
+            width: 45%;
+            background: linear-gradient(150deg, #063970, #0b67b2);
+            color: white;
+            padding: 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .logo {
+            text-align: center;
+        }
+
+        .logo-circle {
+            width: 95px;
+            height: 95px;
+            margin: auto;
+            border-radius: 50%;
+            background: white;
+            color: #063970;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .logo h1 {
+            margin-top: 15px;
+            font-size: 34px;
+        }
+
+        .logo p {
+            margin-top: 5px;
+            opacity: 0.9;
+        }
+
+        .bus-image {
+            text-align: center;
+            font-size: 85px;
+            margin: 20px 0;
+        }
+
+        .features h2 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .features p {
+            margin: 12px 0;
+            font-size: 15px;
+        }
+
+        /* RIGHT SIDE */
+
+        .right-panel {
+            width: 55%;
+            padding: 45px 55px;
+        }
+
+        .heading {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .heading h2 {
+            color: #063970;
+            font-size: 30px;
+        }
+
+        .heading p {
+            color: #777;
+            margin-top: 8px;
+        }
+
+        /* LOGIN TYPE */
+
+        .login-type {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: #f1f5f9;
+            padding: 6px;
+            border-radius: 12px;
+        }
+
+        .type-btn {
+            flex: 1;
+            padding: 13px;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: #555;
+            background: transparent;
+            transition: 0.3s;
+        }
+
+        .type-btn.active {
+            background: #063970;
+            color: white;
+        }
+
+        /* FORM */
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d5dbe2;
+            border-radius: 10px;
+            outline: none;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #0b67b2;
+            box-shadow: 0 0 0 3px rgba(11, 103, 178, 0.1);
+        }
+
+        /* BUS COLORS */
+
+        .bus-options {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .bus-option {
+            padding: 9px 3px;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 3px solid transparent;
+        }
+
+        .bus-option.selected {
+            border-color: #111;
+            transform: scale(1.04);
+        }
+
+        .bus1 {
+            background: #ff4f9a;
+        }
+
+        .bus2 {
+            background: #1e88e5;
+        }
+
+        .bus3 {
+            background: #43a047;
+        }
+
+        .bus4 {
+            background: #fb8c00;
+        }
+
+        .bus5 {
+            background: #8e24aa;
+        }
+
+        /* BUTTON */
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #063970, #0b67b2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: 0.3s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(6, 57, 112, 0.25);
+        }
+
+        /* LINKS */
+
+        .links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 18px;
+        }
+
+        .links a {
+            text-decoration: none;
+            color: #0b67b2;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .register {
+            text-align: center;
+            margin-top: 28px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .register a {
+            color: #0b67b2;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        /* ADMIN */
+
+        #adminForm {
+            display: none;
+        }
+
+        .admin-note {
+            background: #fff8e1;
+            border-left: 4px solid #ffb300;
+            padding: 12px;
+            margin-bottom: 18px;
+            font-size: 13px;
+            color: #665200;
+            border-radius: 5px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 750px) {
+
+            .container {
+                flex-direction: column;
+                width: 95%;
+            }
+
+            .left-panel,
+            .right-panel {
+                width: 100%;
+            }
+
+            .left-panel {
+                padding: 30px;
+                min-height: 350px;
+            }
+
+            .right-panel {
+                padding: 30px;
+            }
+
+            .bus-image {
+                font-size: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- LEFT PANEL -->
+
+    <div class="left-panel">
+
+        <div class="logo">
+
+            <div class="logo-circle">
+                GGI
+            </div>
+
+            <h1>GGI</h1>
+
+            <p>Bus Management System</p>
+
+        </div>
+
+        <div class="bus-image">
+            🚌
+        </div>
+
+        <div class="features">
+
+            <h2>GGI Bus Service</h2>
+
+            <p>✓ Live Bus Tracking</p>
+            <p>✓ Student Attendance</p>
+            <p>✓ Bus Route Information</p>
+            <p>✓ Safe & Secure Transportation</p>
+
+        </div>
+
+    </div>
+
+
+    <!-- RIGHT PANEL -->
+
+    <div class="right-panel">
+
+        <div class="heading">
+
+            <h2>Welcome to GGI</h2>
+
+            <p>Login to access the Bus Service Portal</p>
+
+        </div>
+
+
+        <!-- PARENT / ADMIN -->
+
+        <div class="login-type">
+
+            <button
+                class="type-btn active"
+                id="parentBtn"
+                onclick="showParent()">
+                👨‍👩‍👧 Parent
+            </button>
+
+            <button
+                class="type-btn"
+                id="adminBtn"
+                onclick="showAdmin()">
+                🛡 Admin
+            </button>
+
+        </div>
+
+
+        <!-- PARENT FORM -->
+
+        <form id="parentForm">
+
+            <div class="form-group">
+
+                <label for="studentId">
+                    Student ID
+                </label>
+
+                <input
+                    type="text"
+                    id="studentId"
+                    placeholder="Enter Student ID"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Select Bus
+                </label>
+
+                <div class="bus-options">
+
+                    <div
+                        class="bus-option bus1"
+                        onclick="selectBus(this, 'Bus 1')">
+                        BUS 1
+                    </div>
+
+                    <div
+                        class="bus-option bus2"
+                        onclick="selectBus(this, 'Bus 2')">
+                        BUS 2
+                    </div>
+
+                    <div
+                        class="bus-option bus3"
+                        onclick="selectBus(this, 'Bus 3')">
+                        BUS 3
+                    </div>
+
+                    <div
+                        class="bus-option bus4"
+                        onclick="selectBus(this, 'Bus 4')">
+                        BUS 4
+                    </div>
+
+                    <div
+                        class="bus-option bus5"
+                        onclick="selectBus(this, 'Bus 5')">
+                        BUS 5
+                    </div>
+
+                </div>
+
+                <input
+                    type="hidden"
+                    id="selectedBus"
+                    required>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="login-btn">
+                Login as Parent
+            </button>
+
+        </form>
+
+
+        <!-- ADMIN FORM -->
+
+        <form id="adminForm">
+
+            <div class="admin-note">
+
+                🔒 Admin access requires an authorized password.
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="adminPassword">
+                    Admin Password
+                </label>
+
+                <input
+                    type="password"
+                    id="adminPassword"
+                    placeholder="Enter admin password"
+                    required>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="login-btn">
+                Login as Admin
+            </button>
+
+        </form>
+
+
+        <!-- LINKS -->
+
+        <div class="links">
+
+            <a onclick="forgotPassword()">
+                Forgot Password?
+            </a>
+
+            <a onclick="registerAccount()">
+                Register
+            </a>
+
+        </div>
+
+
+        <div class="register">
+
+            <p>
+                © 2026 GGI Bus Service
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* SELECT LOGIN TYPE */
+
+    function showParent() {
+
+        document.getElementById("parentForm").style.display = "block";
+        document.getElementById("adminForm").style.display = "none";
+
+        document.getElementById("parentBtn")
+            .classList.add("active");
+
+        document.getElementById("adminBtn")
+            .classList.remove("active");
+    }
+
+
+    function showAdmin() {
+
+        document.getElementById("parentForm").style.display = "none";
+        document.getElementById("adminForm").style.display = "block";
+
+        document.getElementById("adminBtn")
+            .classList.add("active");
+
+        document.getElementById("parentBtn")
+            .classList.remove("active");
+    }
+
+
+    /* SELECT BUS */
+
+    function selectBus(element, bus) {
+
+        document
+            .querySelectorAll(".bus-option")
+            .forEach(function(item) {
+
+                item.classList.remove("selected");
+
+            });
+
+        element.classList.add("selected");
+
+        document.getElementById("selectedBus").value = bus;
+
+    }
+
+
+    /* PARENT LOGIN */
+
+    document.getElementById("parentForm")
+        .addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            let studentId =
+                document.getElementById("studentId").value;
+
+            let bus =
+                document.getElementById("selectedBus").value;
+
+            if (bus === "") {
+
+                alert("Please select your bus.");
+
+                return;
+            }
+
+            /*
+              Later you can replace this with
+              Firebase / MySQL authentication.
+            */
+
+            window.location.href =
+                "parent.html";
+
+        });
+
+
+    /* ADMIN LOGIN */
+
+    document.getElementById("adminForm")
+        .addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            let password =
+                document.getElementById("adminPassword").value;
+
+            /*
+              Demo password.
+              For a real system, NEVER store
+              the admin password in JavaScript.
+            */
+
+            if (password === "admin123") {
+
+                window.location.href =
+                    "admindashboard.html";
+
+            } else {
+
+                alert("Incorrect admin password.");
+
+            }
+
+        });
+
+
+    /* FORGOT PASSWORD */
+
+    function forgotPassword() {
+
+        alert(
+            "Password recovery will be connected to your registered email/mobile number."
+        );
+
+    }
+
+
+    /* REGISTER */
+
+    function registerAccount() {
+
+        alert(
+            "Registration page will be opened here."
+        );
+
+        // Later:
+        // window.location.href = "register.html";
+
+    }
+
+</script>
+
+</body>
+</html>
